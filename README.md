@@ -40,7 +40,7 @@
 
 ### 전체 구성도
 
-![구성도](D:\github\2021ESWContest_webOS_Three-Americano\readme_file\구성도.png)
+![구성도](./readme_file/구성도.png)
 
 ### 각 구성부 상세설명
 
@@ -100,4 +100,4 @@ ON/OFF 여부를 수집하고 스케줄을 확인하여 시간에 맞게 명령�
 
 ### 개발일정
 
-![](D:\github\2021ESWContest_webOS_Three-Americano\readme_file\개발일정.png)
+![](./readme_file/개발일정.png)
