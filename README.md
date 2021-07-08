@@ -83,3 +83,9 @@
 ### 개발일정
 
 ![](./readme_file/개발일정.png)
+
+
+## 참고사항
+ - webOS 공식 사이트 (https://www.webosose.org/)
+ - webOS 빌드완료된 이미지 모음 (http://build.webos-ports.org/webosose/)
+ - 임베디드SW경진대회 사무국 (02-2046-1436 / contest@fkii.org / https://www.eswcontest.or.kr)
