@@ -89,3 +89,4 @@
  - webOS 공식 사이트 (https://www.webosose.org/)
  - webOS 빌드완료된 이미지 모음 (http://build.webos-ports.org/webosose/)
  - 임베디드SW경진대회 사무국 (02-2046-1436 / contest@fkii.org / https://www.eswcontest.or.kr)
+ - 2020년도 수상작 JARVIS github (https://github.com/2020ESWContest-webOS-4004)
