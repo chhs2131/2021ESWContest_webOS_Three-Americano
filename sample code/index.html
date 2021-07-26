@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+	//
+	// CRON 설명 LINK : https://evan-moon.github.io/2020/05/21/about-cors/
+	// 사용전 이곳에서 https://cors-anywhere.herokuapp.com/corsdemo 먼저 권한을 받아야함.
+	//
+        //const url = "https://korea.api.thinqai.net:443";
+		const url = "https://cors-anywhere.herokuapp.com/https://korea.api.thinqai.net:443"
+        const tokenIssueUrl = "https://oauth.api.thinqai.net:443";
+        const apiKey = "MTtlYjNhNzAxMjM1Yzk0ZTM1OTZjZmRkN2JmODkxYWFmMzsxNjI2NDA4ODEwMzI1"; // Input your API Key
+        const clientId = "5kvtckl31vc31pdh8j3ub7q4gh"; // Input your client id
+        const clientPw = "87p2phhd4dtcs0il7qa6ru9tnh3fgrnlg29uiu6t8bo70svhmkp"; // Input your client password
+        const encodedString = 'Basic ' + btoa(clientId+':'+clientPw);
+        var accessToken = '';
+        var isTokenExpired = true;
+
+        function getToken() {
+            console.log(encodedString);
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", tokenIssueUrl+'/v1/cognito', true);
+            xhr.setRequestHeader("Authorization", encodedString);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onload = function() { // Call a function when the state changes.
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                // Request finished. Do processing here.
+                responsedData = JSON.parse(xhr.response);
+                accessToken = responsedData.access_token;
+                isTokenExpired = false;
+                }
+            }
+            xhr.send(null);
+        }
+
+        function reqTTS() {
+            const xhr = new XMLHttpRequest();
+            let inputText = document.getElementById('textFeild').value
+            let inputLang = document.querySelector('input[name="tts_lang"]:checked').value
+            var body = {
+                "type": "SYNTHESIS",
+                "input" : {
+                    "text" : inputText,
+                    "type" : "Plain Text"
+                },
+                "voiceConfig": {
+                    "speaker": "Female1",
+                    "speed": "Medium",
+                    "languageCode": inputLang,
+                    "volume": "Volume 4",
+                    "pitch": "Normal",
+                    "emotion": "Happy",
+                    "emotionStrength": "Full"
+                },
+                "audioConfig": {
+                    "encoding": "MP3"
+                },
+                "additionalConfig": {
+                    "privacy": "yes"
+                }
+            }
+            xhr.open("POST", url + '/voice/tts/v2/synthesis', true );
+
+            xhr.responseType = 'arraybuffer';
+            xhr.setRequestHeader("x-api-key", apiKey);
+            if ( accessToken != "" || isTokenExpired === false){
+                xhr.setRequestHeader("Authorization", accessToken);
+            } else {
+                alert('please get token first');
+            }   
+            xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+            xhr.onload = function() { // Call a function when the state changes.
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    // Request finished. Do processing here.
+                    console.log(this.status);
+                    var AudioContext = window.AudioContext || window.webkitAudioContext;
+                    var audioContext = new AudioContext();
+                    var audioElement = document.getElementById('tts');
+                    var sourceElement = document.getElementById('tts_source');
+                    var binary= new Uint8Array(xhr.response);
+                    var blob=new Blob([binary], {type : 'audio/mp3'});
+                    var blobUrl = URL.createObjectURL(blob);
+                    sourceElement.src = blobUrl;
+                    audioElement.load();
+                    audioElement.play();
+                    console.log("재생완료");
+                } else {
+                    console.log(this.status);
+                }
+            }
+            xhr.send(JSON.stringify(body));
+        }
+
+        function reqNLP() {
+            const xhr = new XMLHttpRequest();
+            let inputText = document.getElementById('textFeild1').value;
+            var dateTime = Date.now();
+            var body = {
+                "function":"ANALYSIS",
+                "language":"KOR",
+                "country":"KR",
+                "timeZone":"Asia/Seoul",
+                "inputList":[
+                    inputText
+                ],
+                "trxId":"TRXID_TEST",
+                "deviceId":"DEVICE_ID_TEST",
+                "deviceTime":dateTime,
+                "inputType":"SPEECH"
+            }
+            xhr.open("POST", url + '/voice/nlp/v2/intent', true );
+            xhr.setRequestHeader("x-api-key", apiKey);
+            if ( accessToken != "" || isTokenExpired === false){
+                xhr.setRequestHeader("Authorization", accessToken);
+            } else {
+                alert('Please get token first');
+            }   
+            xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+            xhr.onload = function() { // Call a function when the state changes.
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    // Request finished. Do processing here.
+                    console.log(this.status);
+                    console.log(xhr.response);
+                } else {
+                    console.log(this.status);
+                }
+            }
+            xhr.send(JSON.stringify(body));
+        }
+    </script>
+</head>
+<body>
+    <input type="button" value="Get Token" onclick="getToken()"><br>
+    <br />
+    <hr />
+    <br />
+    <input type="text" id="textFeild" size='25'>
+    <input type="button" value="Read TTS" onclick="reqTTS()">
+    <div>
+        <input type="radio" id="kokr" name="tts_lang" value="ko-KR" checked>
+        <label for="kokr">한국어</label>
+        <input type="radio" id="enus" name="tts_lang" value="en-US">
+        <label for="enus">English</label>
+    </div>
+    <audio id="tts">
+        <source id="tts_source" src="" type="audio/mp3" />
+    </audio>
+    <br />
+    <hr />
+    <br />
+    <input type="text" id="textFeild1" size='25'>
+    <input type="button" value="Using NLP" onclick="reqNLP()">
+    <div>
+        <input type="radio" id="kokr_nlp" name="nlp_lang" value="ko-KR" checked>
+        <label for="kokr1">한국어</label>
+        <input type="radio" id="enus_nlp" name="nlp_lang" value="en-US">
+        <label for="enus1">English</label>
+    </div>
+</body>
+</html>
