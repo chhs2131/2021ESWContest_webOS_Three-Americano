@@ -116,15 +116,25 @@
   - FrameWork : Enact, node.js
   - Lang. : javascript, html, css
   - library : react-dom, react-domm-route
+
+
 - 대쉬보드 라즈베리파이는 터치 화면과 음성을 통해 집 내부의 상황과 가전 스케줄을 확인하고 제어할 수 있다.
   - Google Assistant SDK를 이용하여 음성인식 및 TTS 구현
   - Gaction을 통하여 가전 및 모드 제어, 집의 온습도 체크 등의 Custom Action을 구현
   - 가전 동작 및 기상변화, 위험요소에 대한 사항을 TTS를 통해 안내
+
+
 - 터치 디스플레이를 통해 UI/UX 화면이 제공되며, 이 때 제공되는 UI/UX는 사용자에 따라 설정이 가능하다.
+
+
 - 가전을 개별로 제어하는 기능, 가전 스케줄 정의 및 실행하는 기능, 출근/퇴근/여행 등의 통합메뉴를 제공하는 메뉴가 있다.
+
+
 - WebApp
   - 대시보드를 구성하는 웹 앱으로 Enact을 사용하여 카 대시보드를 구현하였다.
   - 사용자가 사용할 로그인, 회원가입, 홈, 가전, 모드, 스케줄, 가전 동작 정보+UI 페이지로 구 성되어 있으며, WebOSServiceBridge API 를 이용하여 JS 서비스와 통신하여 기능을 구현했다.
+
+
 - JS Service
   - 대시보드의 기능을 담당하는 JS Service이다.
   - 사용자 회원가입, 로그인, 스마트 홈 상태 확인, 가전 제어 명령 등 기능을 담당하며 스마트 홈, 서버와 MQTT 송·수신 서비스와 데이터베이 스인 Firebase의 Authentication, Cloud Firestore, Realtime Database의 데이터를 생성, 읽기, 갱신, 삭제한다.
