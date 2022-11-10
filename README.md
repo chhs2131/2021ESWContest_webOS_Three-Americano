@@ -23,7 +23,7 @@
 
 **시연동영상**
 
-- https://www.youtube.com/watch?v=jM3Lb4GanMw
+- https://youtu.be/ZO1fI2EKnug
 
 <br/>
 
